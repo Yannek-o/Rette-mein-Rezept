@@ -1,11 +1,11 @@
 // --- 1. FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+// Hier ist die Zeile mit getDatabase, ref, push, onValue und remove:
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
     authDomain: "rette-dein-rezept.firebaseapp.com",
-    // KORREKTUR: Die URL für die Region Belgien/Europa
     databaseURL: "https://rette-dein-rezept-default-rtdb.europe-west1.firebasedatabase.app/", 
     projectId: "rette-dein-rezept",
     storageBucket: "rette-dein-rezept.firebasestorage.app",
