@@ -5,8 +5,8 @@ import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com
 const firebaseConfig = {
     apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
     authDomain: "rette-dein-rezept.firebaseapp.com",
-    // FIX: Hier wurde das "n" bei "dein" hinzugefügt!
-    databaseURL: "https://rette-dein-rezept-default-rtdb.firebaseio.com/", 
+    // KORREKTUR: Die URL für die Region Belgien/Europa
+    databaseURL: "https://rette-dein-rezept-default-rtdb.europe-west1.firebasedatabase.app/", 
     projectId: "rette-dein-rezept",
     storageBucket: "rette-dein-rezept.firebasestorage.app",
     messagingSenderId: "100953580692",
