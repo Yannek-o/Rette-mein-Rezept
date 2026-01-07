@@ -5,6 +5,8 @@ import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com
 const firebaseConfig = {
     apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
     authDomain: "rette-dein-rezept.firebaseapp.com",
+    // Fix: Die databaseURL ist zwingend erforderlich für Realtime Database
+    databaseURL: "https://rette-de-rezept-default-rtdb.firebaseio.com/", 
     projectId: "rette-dein-rezept",
     storageBucket: "rette-dein-rezept.firebasestorage.app",
     messagingSenderId: "100953580692",
@@ -35,7 +37,6 @@ document.getElementById("add-button").onclick = () => {
             timestamp: Date.now()
         });
 
-        // Felder leeren - KEIN SOUND MEHR HIER!
         [nameInput, ingredientsInput, instructionsInput].forEach(el => el.value = "");
         alert("Rezept wurde erfolgreich gespeichert!");
     } else {
@@ -48,23 +49,28 @@ function updateRecipeList(snapshot) {
     listEl.innerHTML = ""; 
     
     if (snapshot.exists()) {
-        const filterValue = filterSelectEl.value;
+        const filterValue = filterSelectEl.value.toLowerCase().trim();
         let recipesArray = Object.entries(snapshot.val());
-
-        // Alphabetisch sortieren
         recipesArray.sort((a, b) => a[1].name.localeCompare(b[1].name));
 
         let hasResults = false;
         recipesArray.forEach(([id, data]) => {
-            if (data.category === filterValue) {
+            const recipeCategory = (data.category || "").toLowerCase().trim();
+
+            if (recipeCategory === filterValue) {
                 hasResults = true;
                 const li = document.createElement("li");
                 li.innerHTML = `<span>${data.name}</span> <small>➔</small>`;
                 
                 li.onclick = () => {
-                    document.getElementById("modal-title").textContent = data.name;
-                    document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten.";
-                    document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung.";
+                    const title = document.getElementById("modal-title");
+                    const ingr = document.getElementById("modal-ingredients");
+                    const inst = document.getElementById("modal-instructions");
+
+                    if(title) title.textContent = data.name;
+                    if(ingr) ingr.textContent = data.ingredients || "Keine Zutaten.";
+                    if(inst) inst.textContent = data.instructions || "Keine Anleitung.";
+                    
                     modal.style.display = "block";
                 };
 
@@ -79,14 +85,13 @@ function updateRecipeList(snapshot) {
         });
 
         if (!hasResults) {
-            listEl.innerHTML = "<li>Keine Rezepte in dieser Kategorie gefunden.</li>";
+            listEl.innerHTML = `<li>Keine Rezepte in "${filterSelectEl.value}" gefunden.</li>`;
         }
     } else {
-        listEl.innerHTML = "<li>Noch keine Rezepte gespeichert.</li>";
+        listEl.innerHTML = "<li>Noch keine Rezepte in der Datenbank.</li>";
     }
 }
 
-// Live-Überwachung der Firebase Datenbank
 onValue(recipesRef, (snapshot) => {
     updateRecipeList(snapshot);
 });
@@ -96,7 +101,6 @@ document.querySelector(".close-button").onclick = () => modal.style.display = "n
 window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
 // --- 5. FILTER-UPDATE ---
-// Reagiert sofort auf Auswahländerung ohne Neuladen der Seite
 filterSelectEl.onchange = () => {
     onValue(recipesRef, (snapshot) => {
         updateRecipeList(snapshot);
