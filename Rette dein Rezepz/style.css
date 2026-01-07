@@ -1,250 +1,156 @@
-/* =========================================
-   1. GRUNDEINSTELLUNGEN
-   ========================================= */
-* {
-    box-sizing: border-box;
+/* --- 1. BASIS-STYLING --- */
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: #f4f7f6; 
+    margin: 0; 
+    text-align: center; 
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f9;
-    color: #333333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    scroll-behavior: smooth;
+header { 
+    background: #ff6b6b; /* Dein Korallen-Rot aus dem Screenshot */
+    color: white; 
+    padding: 20px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* =========================================
-   2. HEADER
-   ========================================= */
-header {
-    background-color: #ff6f61;
-    color: white;
-    width: 100%;
-    padding: 40px 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+/* --- 2. LAYOUT-CONTAINER --- */
+.container { 
+    display: flex; 
+    justify-content: center; 
+    gap: 20px; 
+    padding: 20px; 
+    flex-wrap: wrap; /* Sorgt dafür, dass Boxen auf Handys untereinander rutschen */
 }
 
-header h1 { margin: 0; font-size: 2.5rem; }
-header p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 10px auto 0 auto; }
-
-/* =========================================
-   3. DASHBOARD (Flexibles Layout)
-   ========================================= */
-#dashboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    width: 95%; 
-    max-width: 1100px; 
-    margin: 30px auto;
+/* Die weißen Karten-Boxen */
+.card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    width: 300px; 
 }
 
-#main-input-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    width: 100%;
-    gap: 20px;
+/* Eingabefelder einheitlich stylen */
+input, select, textarea { 
+    width: 100%; 
+    margin-bottom: 10px; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
+    box-sizing: border-box; /* Wichtig, damit Padding die Box nicht verbreitert */
 }
 
-#legende, #kategorie-auswahl {
-    flex: 1;
-    min-width: 220px;
-    background-color: white;
-    padding: 25px; 
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    border-top: 5px solid #2ECC71; 
-}
+textarea { height: 70px; resize: none; }
 
-#neues-rezept-formular {
-    flex: 2;
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* =========================================
-   4. KOCH-TIMER
-   ========================================= */
-#kuechen-timer {
-    width: 100%;
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    border-top: 5px solid #FFD700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#timer-inhalt {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-}
-
-#timer-anzeige {
-    font-size: 3rem;
-    font-weight: bold;
-    font-family: monospace;
-}
-
-/* =========================================
-   5. FORMULAR ELEMENTE & BUTTONS
-   ========================================= */
-input[type="text"], textarea, select {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #eee;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-input:focus, textarea:focus, select:focus {
-    border-color: #ff6f61;
-    outline: none;
-}
-
-button {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
+button { 
+    padding: 10px; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    width: 100%; 
     transition: 0.3s;
 }
 
-button:hover {
-    background-color: #555;
-    transform: scale(1.02);
+#add-button { background: #2d3436; color: white; }
+#add-button:hover { background: #000; }
+
+/* --- 3. DIE LAUFENDE KÖCHIN --- */
+.animation-container { 
+    position: fixed; /* Bleibt immer an der gleichen Stelle am Bildschirm */
+    top: 60px; 
+    width: 100%; 
+    z-index: -1; /* Hinter dem Text */
+    pointer-events: none; /* Man kann "durch" das Bild klicken */
 }
 
-/* =========================================
-   6. REZEPT-LISTE & KARTEN (Inkl. Klapp-Funktion)
-   ========================================= */
-main#rezept-liste {
+#running-chef { 
+    width: 80px; 
+    position: absolute; 
+    animation: walk 15s linear infinite; /* Name der Animation, Dauer, Gleichmäßig, Unendlich */
+}
+
+/* Der Pfad der Animation: von links außen nach ganz rechts */
+@keyframes walk { 
+    from { left: -100px; } 
+    to { left: 100%; } 
+}
+
+/* --- 4. DAS MODAL-POPUP --- */
+.modal { 
+    display: none; /* Standardmäßig unsichtbar */
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; top: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.6); /* Dunkler Schleier */
+    backdrop-filter: blur(4px); /* Macht den Hintergrund unscharf (Modern!) */
+}
+
+.modal-content { 
+    background: white; 
+    margin: 10% auto; 
+    padding: 25px; 
+    border-radius: 15px; 
+    width: 80%; 
+    max-width: 450px; 
+    position: relative; 
+    text-align: left; /* Text im Modal ist linksbündig für bessere Lesbarkeit */
+}
+
+.close-button { 
+    position: absolute; 
+    right: 20px; top: 10px; 
+    font-size: 24px; 
+    cursor: pointer; 
+}
+
+.modal-body p { 
+    white-space: pre-wrap; /* Behält Zeilenumbrüche aus der Textarea bei */
+    background: #f9f9f9; 
+    padding: 10px; 
+    border-radius: 5px; 
+    border-left: 4px solid #ff6b6b;
+}
+
+/* --- 5. REZEPT-LISTE --- */
+ul { list-style: none; padding: 0; }
+
+li { 
+    background: #fff; 
+    border: 1px solid #eee; 
+    margin: 8px 0; 
+    padding: 12px; 
+    border-radius: 8px; 
+    cursor: pointer; 
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    padding: 20px;
-    width: 100%;
+    justify-content: space-between;
+    transition: 0.2s; 
 }
 
-.rezept-karte {
-    background: white;
-    width: 320px;
-    max-width: 100%;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border-top: 5px solid #ff6f61;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.3s;
+li:hover { 
+    border-color: #ff6b6b; 
+    background: #fffafa; 
+    transform: translateX(5px); /* Kleiner Bewegungseffekt beim Drüberfahren */
 }
 
-.rezept-karte:hover { transform: translateY(-5px); }
-
-/* Versteckt Details am Anfang */
-.rezept-details {
-    display: none;
-    margin-top: 15px;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+/* --- 6. KOCH-TIMER --- */
+.timer-card { 
+    background: white; 
+    max-width: 350px; 
+    margin: 40px auto; 
+    padding: 25px; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
 }
 
-/* Zeigt Details wenn Karte die Klasse 'offen' hat */
-.rezept-karte.offen .rezept-details {
-    display: block;
-    animation: aufklappen 0.4s ease;
+#timer-display { 
+    font-size: 3.5rem; 
+    color: #ff6b6b; 
+    font-family: 'Courier New', monospace; /* Digitaler Look */
 }
 
-@keyframes aufklappen {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Icons auf den Karten */
-.karten-buttons {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    display: flex;
-    gap: 8px;
-}
-
-.loeschen-btn, .edit-btn {
-    background: none !important;
-    padding: 5px !important;
-    font-size: 18px;
-    opacity: 0.6;
-}
-
-.loeschen-btn:hover { opacity: 1; filter: drop-shadow(0 0 2px red); }
-.edit-btn:hover { opacity: 1; filter: drop-shadow(0 0 2px blue); }
-
-/* =========================================
-   7. RESPONSIVE (Handy & Tablet)
-   ========================================= */
-@media (max-width: 850px) {
-    #main-input-wrapper {
-        flex-direction: column;
-    }
-
-    #legende, #neues-rezept-formular, #kategorie-auswahl {
-        width: 100%;
-        max-width: none;
-    }
-
-    #timer-inhalt {
-        flex-direction: column;
-    }
-
-    .rezept-karte {
-        width: 100%;
-    }
-}
-
-/* Optimierung für Querformat am Handy */
-@media (max-height: 500px) {
-    header { padding: 15px; }
-    header p { display: none; }
-}
-
-/* =========================================
-   8. ANIMATIONEN & EXTRAS
-   ========================================= */
-#laufender-koch {
-    width: 60px;
-    position: fixed;
-    bottom: 20px;
-    left: -150px;
-    z-index: 999;
-    animation: einmal-durchlaufen 30s linear infinite;
-}
-
-@keyframes einmal-durchlaufen { 
-    from { left: -150px; } 
-    to { left: 100vw; } 
-}
+.timer-btns { display: flex; gap: 10px; margin-top: 10px; }
+.btn-primary { background: #27ae60; color: white; }
+.btn-danger { background: #e74c3c; color: white; }

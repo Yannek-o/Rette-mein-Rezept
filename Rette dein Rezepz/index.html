@@ -7,87 +7,76 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <img id="laufender-koch" src="images/koch.gif" alt="Laufender Koch">
-
-    <header>
-        <h1>Rette dein Rezept 🥘</h1>
-        <p>Die guten alten Rezepte gehen verloren? Nicht mit mir! 
-            Hier könnt ihr Rezepte von Mama, Oma oder einfach alles, 
-            was nicht verloren gehen soll, hochladen.</p>
-    </header>
-
-    <div id="dashboard-container">
-        
-        <div id="main-input-wrapper"> 
-            
-            <section id="legende">
-                <h2>✨ Dein Rezept-Retter</h2>
-                <ol>
-                    <li>Klicke auf **Kategorie** und wähle, wozu dein Rezept passt.</li>
-                    <li>Gib dein Rezept ein und klicke auf **Speichern**.</li>
-                    <li>Der **Koch-Timer** hilft dir, die Kochzeiten optimal im Blick zu behalten.</li>
-                </ol>
-            </section>
-
-            <section id="neues-rezept-formular">
-                <h2>Neues Rezept hinzufügen</h2>
-                <input type="text" id="titel" placeholder="Rezept-Name" lang="de" spellcheck="true">
-                <textarea id="zutaten" placeholder="Zutaten (Drücke Enter für neue Zeile...)" lang="de" spellcheck="true"></textarea>
-                <textarea id="anleitung" placeholder="Zubereitung" lang="de" spellcheck="true"></textarea>
-                <button id="speichernButton">Speichern</button>
-            </section>
-
-            <section id="kategorie-auswahl">
-                <h2>Kategorie</h2>
-                <select id="kategorie">
-                    <option value="sonstiges">Sonstiges</option>
-                    <option value="fleisch">Fleisch</option>
-                    <option value="vegetarisch">Vegetarisch</option>
-                    <option value="dessert">Dessert</option>
-                    <option value="drinks">Drinks/Cocktails</option>
-                </select>
-                <div class="placeholder-height"></div> 
-            </section>
-
-        </div> <section id="kuechen-timer">
-            <h2>⏱️ Koch-Timer</h2>
-            
-            <div id="timer-inhalt"> <div id="timer-anzeige">00:00</div>
-                
-                <div class="timer-inputs">
-                    <input type="number" id="minuten" min="0">
-                    <span>:</span>
-                    <input type="number" id="sekunden" min="0" max="59">
-                </div>
-                
-                <div class="timer-labels">
-                    <span>Min</span>
-                    <span>Sek</span>
-                </div>
-
-                <div class="timer-buttons">
-                    <button onclick="startTimer()" id="start-btn">Start</button>
-                    <button onclick="resetTimer()" id="reset-btn">Reset</button>
-                </div>
-            </div>
-        </section>
-        
-    </div> <hr> 
-    
-    <div id="such-container">
-        <input type="text" id="suche" placeholder="🔍 Rezepte durchsuchen..." onkeyup="rezepteFiltern()">
+    <div class="animation-container">
+        <img src="koechin.gif" id="running-chef" alt="Laufende Köchin">
     </div>
 
-    <main id="rezept-liste">
+    <header>
+        <h1>Rette dein Rezept 🍳</h1>
+        <p>Deine kulinarischen Schätze an einem sicheren Ort.</p>
+    </header>
+
+    <main class="container">
+        <section class="card info-box">
+            <h3>✨ Rezept-Retter</h3>
+            <ol>
+                <li>Kategorie wählen & eingeben.</li>
+                <li>Zutaten & Anleitung ergänzen.</li>
+                <li>Timer beim Kochen nutzen!</li>
+            </ol>
+        </section>
+
+        <section class="card input-container">
+            <h3>Neues Rezept</h3>
+            <input type="text" id="input-field" placeholder="Name...">
+            <select id="category-select">
+                <option value="Fleisch">Fleisch</option>
+                <option value="Vegetarisch">Vegetarisch</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+            <textarea id="ingredients-field" placeholder="Zutaten..."></textarea>
+            <textarea id="instructions-field" placeholder="Zubereitung..."></textarea>
+            <button id="add-button">Speichern</button>
+        </section>
+
+        <section class="card right-box">
+            <h3>Kategorie & Rezepte</h3>
+            <select id="filter-select">
+                <option value="Fleisch">Fleisch</option>
+                <option value="Vegetarisch">Vegetarisch</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+            <ul id="recipe-list"></ul> </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Rette dein Rezept</p>
-    </footer>
+    <div id="recipe-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div class="modal-body">
+                <h4>Zutaten:</h4><p id="modal-ingredients"></p>
+                <hr>
+                <h4>Zubereitung:</h4><p id="modal-instructions"></p>
+            </div>
+        </div>
+    </div>
 
-    <audio id="timer-sound" src="ping.mp3" preload="auto"></audio>
+    <section class="timer-card">
+        <h3>⏱️ Koch-Timer</h3>
+        <div id="timer-display">00:00</div>
+        <div class="timer-inputs">
+            <input type="number" id="minutes" placeholder="Min" min="0">
+            <input type="number" id="seconds" placeholder="Sek" min="0" max="59">
+        </div>
+        <div class="timer-btns">
+            <button id="start-timer" class="btn-primary">Start</button>
+            <button id="reset-timer" class="btn-danger">Reset</button>
+        </div>
+    </section>
+
+    <audio id="ping-sound" src="ping.mp3"></audio>
     <script type="module" src="script.js"></script>
-
 </body>
 </html>
