@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rette dein Rezept</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="animation-container">
+        <img src="koechin.gif" id="chef-left" class="vertical-chef" alt="Köchin links">
+        <img src="koechin.gif" id="chef-right" class="vertical-chef" alt="Köchin rechts">
+    </div>
+
+    <header>
+        <h1>Rette dein Rezept 🍳</h1>
+        <p>Deine kulinarischen Schätze an einem sicheren Ort.</p>
+    </header> <main class="container">
+        <section class="card info-box">
+            <h3>✨ Rezept-Retter</h3>
+            <ol>
+                <li>Kategorie wählen & eingeben.</li>
+                <li>Zutaten & Anleitung ergänzen.</li>
+                <li>Timer beim Kochen nutzen!</li>
+            </ol>
+        </section>
+
+        <section class="card input-container">
+            <h3>Neues Rezept</h3>
+            <input type="text" id="input-field" placeholder="Name...">
+            <select id="category-select">
+                <option value="Fleisch">Fleisch</option>
+                <option value="Vegetarisch">Vegetarisch</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+            <textarea id="ingredients-field" placeholder="Zutaten..."></textarea>
+            <textarea id="instructions-field" placeholder="Zubereitung..."></textarea>
+            <button id="add-button">Speichern</button>
+        </section>
+
+        <section class="card right-box">
+            <h3>Kategorie & Rezepte</h3>
+            <select id="filter-select">
+                <option value="Fleisch">Fleisch</option>
+                <option value="Vegetarisch">Vegetarisch</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+            <ul id="recipe-list"></ul>
+        </section>
+    </main>
+
+    <div id="recipe-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div class="modal-body">
+                <h4>Zutaten:</h4><p id="modal-ingredients"></p>
+                <hr>
+                <h4>Zubereitung:</h4><p id="modal-instructions"></p>
+            </div>
+        </div>
+    </div>
+
+    <section class="timer-card">
+        <h3>⏱️ Koch-Timer</h3>
+        <div id="timer-display">00:00</div>
+        <div class="timer-inputs">
+            <input type="number" id="minutes" placeholder="Min" min="0">
+            <input type="number" id="seconds" placeholder="Sek" min="0" max="59">
+        </div>
+        <div class="timer-btns">
+            <button id="start-timer" class="btn-primary">Start</button>
+            <button id="reset-timer" class="btn-danger">Reset</button>
+        </div>
+    </section>
+
+    <audio id="ping-sound" src="ping.mp3"></audio>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
