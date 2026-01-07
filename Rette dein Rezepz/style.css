@@ -56,26 +56,46 @@ button {
 #add-button { background: #2d3436; color: white; }
 #add-button:hover { background: #000; }
 
-/* --- 3. DIE LAUFENDE KÖCHIN --- */
-.animation-container { 
-    position: fixed; /* Bleibt immer an der gleichen Stelle am Bildschirm */
-    top: 60px; 
-    width: 100%; 
-    z-index: -1; /* Hinter dem Text */
-    pointer-events: none; /* Man kann "durch" das Bild klicken */
+/* --- 3. DIE LAUFENDE KÖCHIN (VERTIKAL) --- */
+.animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Hinter dem Inhalt */
+    pointer-events: none; /* Man kann durch die Köchinnen hindurchklicken */
 }
 
-#running-chef { 
-    width: 80px; 
-    position: absolute; 
-    animation: walk 15s linear infinite; /* Name der Animation, Dauer, Gleichmäßig, Unendlich */
+.vertical-chef {
+    width: 80px; /* Breite der Köchin */
+    position: absolute;
+    /* Animation: Name 'walkDown', Dauer 12s, unendlich, gleichmäßig */
+    animation: walkDown 12s linear infinite;
 }
 
-/* Der Pfad der Animation: von links außen nach ganz rechts */
-@keyframes walk { 
-    from { left: -100px; } 
-    to { left: 100%; } 
+/* Positionierung der linken Köchin */
+#chef-left {
+    left: 20px;
 }
+
+/* Positionierung der rechten Köchin */
+#chef-right {
+    right: 20px;
+    transform: scaleX(-1); /* Spiegeln, damit sie nach innen schaut */
+    animation-delay: 6s; /* Startet versetzt für mehr Abwechslung */
+}
+
+/* Die Bewegung von oben nach unten */
+@keyframes walkDown {
+    from {
+        top: -100px; /* Startet oberhalb des Bildschirms */
+    }
+    to {
+        top: 100%; /* Läuft bis ganz nach unten */
+    }
+}
+
 
 /* --- 4. DAS MODAL-POPUP --- */
 .modal { 

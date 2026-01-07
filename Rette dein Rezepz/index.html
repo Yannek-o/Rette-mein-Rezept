@@ -8,15 +8,14 @@
 </head>
 <body>
     <div class="animation-container">
-        <img src="koechin.gif" id="running-chef" alt="Laufende Köchin">
+        <img src="koechin.gif" id="chef-left" class="vertical-chef" alt="Köchin links">
+        <img src="koechin.gif" id="chef-right" class="vertical-chef" alt="Köchin rechts">
     </div>
 
     <header>
         <h1>Rette dein Rezept 🍳</h1>
         <p>Deine kulinarischen Schätze an einem sicheren Ort.</p>
-    </header>
-
-    <main class="container">
+    </header> <main class="container">
         <section class="card info-box">
             <h3>✨ Rezept-Retter</h3>
             <ol>
@@ -48,7 +47,8 @@
                 <option value="Vegan">Vegan</option>
                 <option value="Dessert">Dessert</option>
             </select>
-            <ul id="recipe-list"></ul> </section>
+            <ul id="recipe-list"></ul>
+        </section>
     </main>
 
     <div id="recipe-modal" class="modal">
