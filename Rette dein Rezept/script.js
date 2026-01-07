@@ -15,7 +15,6 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const recipesRef = ref(database, "recipes");
 
-// HTML Elemente referenzieren
 const modal = document.getElementById("recipe-modal");
 const listEl = document.getElementById("recipe-list");
 const filterSelectEl = document.getElementById("filter-select");
@@ -28,53 +27,49 @@ document.getElementById("add-button").onclick = () => {
     const categoryInput = document.getElementById("category-select");
 
     if (nameInput.value.trim()) {
-        // Wir speichern alle Daten als ein Objekt in Firebase
         push(recipesRef, {
             name: nameInput.value,
             category: categoryInput.value,
             ingredients: ingredientsInput.value,
             instructions: instructionsInput.value,
-            timestamp: Date.now() // Optional: Merkt sich, wann es erstellt wurde
+            timestamp: Date.now()
         });
 
-        // Felder leeren und Sound abspielen
+        // Felder leeren - KEIN SOUND MEHR HIER!
         [nameInput, ingredientsInput, instructionsInput].forEach(el => el.value = "");
-        document.getElementById("ping-sound").play();
+        alert("Rezept wurde erfolgreich gespeichert!");
     } else {
         alert("Bitte gib zumindest einen Namen für das Rezept ein!");
     }
 };
 
-// --- 3. DATEN LADEN, SORTIEREN & ANZEIGEN ---
-onValue(recipesRef, (snapshot) => {
-    listEl.innerHTML = ""; // Liste leeren vor dem Neuzeichnen
+// --- 3. DATEN LADEN & ANZEIGEN ---
+function updateRecipeList(snapshot) {
+    listEl.innerHTML = ""; 
     
     if (snapshot.exists()) {
         const filterValue = filterSelectEl.value;
-        
-        // Daten in ein Array umwandeln für die Sortierung
         let recipesArray = Object.entries(snapshot.val());
 
-        // ALPHABETISCHE SORTIERUNG: A -> Z
+        // Alphabetisch sortieren
         recipesArray.sort((a, b) => a[1].name.localeCompare(b[1].name));
 
+        let hasResults = false;
         recipesArray.forEach(([id, data]) => {
-            // Nur Rezepte der gewählten Kategorie anzeigen
             if (data.category === filterValue) {
+                hasResults = true;
                 const li = document.createElement("li");
                 li.innerHTML = `<span>${data.name}</span> <small>➔</small>`;
                 
-                // Klick öffnet das Modal mit den Details
                 li.onclick = () => {
                     document.getElementById("modal-title").textContent = data.name;
-                    document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten eingetragen.";
-                    document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung eingetragen.";
+                    document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten.";
+                    document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung.";
                     modal.style.display = "block";
                 };
 
-                // RECHTSKLICK: Rezept löschen
                 li.oncontextmenu = (e) => {
-                    e.preventDefault(); // Verhindert das normale Browsermenü
+                    e.preventDefault();
                     if (confirm(`Möchtest du "${data.name}" wirklich löschen?`)) {
                         remove(ref(database, `recipes/${id}`));
                     }
@@ -82,21 +77,30 @@ onValue(recipesRef, (snapshot) => {
                 listEl.append(li);
             }
         });
+
+        if (!hasResults) {
+            listEl.innerHTML = "<li>Keine Rezepte in dieser Kategorie gefunden.</li>";
+        }
     } else {
-        listEl.innerHTML = "<li style='cursor:default;'>Noch keine Rezepte gespeichert.</li>";
+        listEl.innerHTML = "<li>Noch keine Rezepte gespeichert.</li>";
     }
+}
+
+// Live-Überwachung der Firebase Datenbank
+onValue(recipesRef, (snapshot) => {
+    updateRecipeList(snapshot);
 });
 
-// --- 4. MODAL LOGIK (POPUP SCHLIESSEN) ---
+// --- 4. MODAL LOGIK ---
 document.querySelector(".close-button").onclick = () => modal.style.display = "none";
 window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
 // --- 5. FILTER-UPDATE ---
-// Wenn du die Kategorie wechselst, wird die Liste sofort neu gefiltert
+// Reagiert sofort auf Auswahländerung ohne Neuladen der Seite
 filterSelectEl.onchange = () => {
-    // Ein kleiner Trick: Wir triggern onValue manuell neu durch ein kurzes "Refresh" der Anzeige
-    // Da onValue "live" ist, reicht es oft schon, aber ein reload ist am sichersten:
-    // location.reload(); // Falls du es ganz sicher haben willst
+    onValue(recipesRef, (snapshot) => {
+        updateRecipeList(snapshot);
+    }, { onlyOnce: true });
 };
 
 // --- 6. KOCH-TIMER ---
