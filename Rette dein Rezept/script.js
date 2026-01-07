@@ -5,8 +5,8 @@ import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com
 const firebaseConfig = {
     apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
     authDomain: "rette-dein-rezept.firebaseapp.com",
-    // Fix: Die databaseURL ist zwingend erforderlich für Realtime Database
-    databaseURL: "https://rette-de-rezept-default-rtdb.firebaseio.com/", 
+    // FIX: Hier wurde das "n" bei "dein" hinzugefügt!
+    databaseURL: "https://rette-dein-rezept-default-rtdb.firebaseio.com/", 
     projectId: "rette-dein-rezept",
     storageBucket: "rette-dein-rezept.firebasestorage.app",
     messagingSenderId: "100953580692",
@@ -31,7 +31,8 @@ document.getElementById("add-button").onclick = () => {
     if (nameInput.value.trim()) {
         push(recipesRef, {
             name: nameInput.value,
-            category: categoryInput.value,
+            // Wir speichern die Kategorie einheitlich, um Filterfehler zu vermeiden
+            category: categoryInput.value.trim(), 
             ingredients: ingredientsInput.value,
             instructions: instructionsInput.value,
             timestamp: Date.now()
