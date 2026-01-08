@@ -7,22 +7,20 @@ body {
 }
 
 header { 
-    background: #ff6b6b; /* Dein Korallen-Rot aus dem Screenshot */
+    background: #ff6b6b; 
     color: white; 
     padding: 20px; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* --- 2. LAYOUT-CONTAINER --- */
 .container { 
     display: flex; 
     justify-content: center; 
     gap: 20px; 
     padding: 20px; 
-    flex-wrap: wrap; /* Sorgt dafür, dass Boxen auf Handys untereinander rutschen */
+    flex-wrap: wrap; 
 }
 
-/* Die weißen Karten-Boxen */
 .card { 
     background: white; 
     padding: 20px; 
@@ -31,14 +29,13 @@ header {
     width: 300px; 
 }
 
-/* Eingabefelder einheitlich stylen */
 input, select, textarea { 
     width: 100%; 
     margin-bottom: 10px; 
     padding: 10px; 
     border: 1px solid #ddd; 
     border-radius: 6px; 
-    box-sizing: border-box; /* Wichtig, damit Padding die Box nicht verbreitert */
+    box-sizing: border-box; 
 }
 
 textarea { height: 70px; resize: none; }
@@ -56,67 +53,51 @@ button {
 #add-button { background: #2d3436; color: white; }
 #add-button:hover { background: #000; }
 
-/* --- 3. DIE LAUFENDE KÖCHIN (VERTIKAL) --- */
+/* --- 2. DIE LAUFENDE KÖCHIN --- */
 .animation-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Hinter dem Inhalt */
-    pointer-events: none; /* Man kann durch die Köchinnen hindurchklicken */
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; 
+    pointer-events: none; 
 }
 
 .vertical-chef {
-    width: 80px; /* Breite der Köchin */
+    width: 80px;
     position: absolute;
-    /* Animation: Name 'walkDown', Dauer 12s, unendlich, gleichmäßig */
     animation: walkDown 12s linear infinite;
 }
 
-/* Positionierung der linken Köchin */
-#chef-left {
-    left: 20px;
-}
+#chef-left { left: 20px; }
+#chef-right { right: 20px; transform: scaleX(-1); animation-delay: 6s; }
 
-/* Positionierung der rechten Köchin */
-#chef-right {
-    right: 20px;
-    transform: scaleX(-1); /* Spiegeln, damit sie nach innen schaut */
-    animation-delay: 6s; /* Startet versetzt für mehr Abwechslung */
-}
-
-/* Die Bewegung von oben nach unten */
 @keyframes walkDown {
-    from {
-        top: -100px; /* Startet oberhalb des Bildschirms */
-    }
-    to {
-        top: 100%; /* Läuft bis ganz nach unten */
-    }
+    from { top: -100px; }
+    to { top: 100%; }
 }
 
-
-/* --- 4. DAS MODAL-POPUP --- */
+/* --- 3. DAS MODAL-POPUP (MIT SCROLL-FUNKTION) --- */
 .modal { 
-    display: none; /* Standardmäßig unsichtbar */
+    display: none; 
     position: fixed; 
     z-index: 1000; 
     left: 0; top: 0; 
     width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.6); /* Dunkler Schleier */
-    backdrop-filter: blur(4px); /* Macht den Hintergrund unscharf (Modern!) */
+    background: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(4px); 
 }
 
 .modal-content { 
     background: white; 
-    margin: 10% auto; 
+    margin: 5% auto; 
     padding: 25px; 
     border-radius: 15px; 
     width: 80%; 
     max-width: 450px; 
     position: relative; 
-    text-align: left; /* Text im Modal ist linksbündig für bessere Lesbarkeit */
+    text-align: left; 
+    /* Fix für langes Lesen: */
+    max-height: 85vh; 
+    overflow-y: auto; 
 }
 
 .close-button { 
@@ -127,50 +108,24 @@ button {
 }
 
 .modal-body p { 
-    white-space: pre-wrap; /* Behält Zeilenumbrüche aus der Textarea bei */
+    white-space: pre-wrap; 
     background: #f9f9f9; 
     padding: 10px; 
     border-radius: 5px; 
     border-left: 4px solid #ff6b6b;
 }
 
-/* --- 5. REZEPT-LISTE --- */
+/* --- 4. LISTE & TIMER --- */
 ul { list-style: none; padding: 0; }
-
 li { 
-    background: #fff; 
-    border: 1px solid #eee; 
-    margin: 8px 0; 
-    padding: 12px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    display: flex;
-    justify-content: space-between;
-    transition: 0.2s; 
+    background: #fff; border: 1px solid #eee; 
+    margin: 8px 0; padding: 12px; border-radius: 8px; 
+    cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; 
 }
+li:hover { border-color: #ff6b6b; background: #fffafa; transform: translateX(5px); }
 
-li:hover { 
-    border-color: #ff6b6b; 
-    background: #fffafa; 
-    transform: translateX(5px); /* Kleiner Bewegungseffekt beim Drüberfahren */
-}
-
-/* --- 6. KOCH-TIMER --- */
-.timer-card { 
-    background: white; 
-    max-width: 350px; 
-    margin: 40px auto; 
-    padding: 25px; 
-    border-radius: 15px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-}
-
-#timer-display { 
-    font-size: 3.5rem; 
-    color: #ff6b6b; 
-    font-family: 'Courier New', monospace; /* Digitaler Look */
-}
-
+.timer-card { background: white; max-width: 350px; margin: 40px auto; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+#timer-display { font-size: 3.5rem; color: #ff6b6b; font-family: 'Courier New', monospace; }
 .timer-btns { display: flex; gap: 10px; margin-top: 10px; }
 .btn-primary { background: #27ae60; color: white; }
 .btn-danger { background: #e74c3c; color: white; }

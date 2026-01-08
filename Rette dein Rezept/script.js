@@ -1,6 +1,5 @@
 // --- 1. FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-// Hier ist die Zeile mit getDatabase, ref, push, onValue und remove:
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -31,7 +30,6 @@ document.getElementById("add-button").onclick = () => {
     if (nameInput.value.trim()) {
         push(recipesRef, {
             name: nameInput.value,
-            // Wir speichern die Kategorie einheitlich, um Filterfehler zu vermeiden
             category: categoryInput.value.trim(), 
             ingredients: ingredientsInput.value,
             instructions: instructionsInput.value,
@@ -64,20 +62,15 @@ function updateRecipeList(snapshot) {
                 li.innerHTML = `<span>${data.name}</span> <small>➔</small>`;
                 
                 li.onclick = () => {
-                    const title = document.getElementById("modal-title");
-                    const ingr = document.getElementById("modal-ingredients");
-                    const inst = document.getElementById("modal-instructions");
-
-                    if(title) title.textContent = data.name;
-                    if(ingr) ingr.textContent = data.ingredients || "Keine Zutaten.";
-                    if(inst) inst.textContent = data.instructions || "Keine Anleitung.";
-                    
+                    document.getElementById("modal-title").textContent = data.name;
+                    document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten.";
+                    document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung.";
                     modal.style.display = "block";
                 };
 
                 li.oncontextmenu = (e) => {
                     e.preventDefault();
-                    if (confirm(`Möchtest du "${data.name}" wirklich löschen?`)) {
+                    if (confirm(`"${data.name}" wirklich löschen?`)) {
                         remove(ref(database, `recipes/${id}`));
                     }
                 };
@@ -120,7 +113,6 @@ document.getElementById("start-timer").onclick = () => {
     clearInterval(timer);
     timer = setInterval(() => {
         totalSeconds--;
-        
         const m = Math.floor(totalSeconds / 60);
         const s = totalSeconds % 60;
         document.getElementById("timer-display").textContent = 
@@ -129,7 +121,7 @@ document.getElementById("start-timer").onclick = () => {
         if (totalSeconds <= 0) {
             clearInterval(timer);
             document.getElementById("ping-sound").play();
-            alert("Zeit abgelaufen! Dein Essen ist fertig. 🍽️");
+            alert("Zeit abgelaufen! 🍽️");
         }
     }, 1000);
 };
@@ -137,4 +129,6 @@ document.getElementById("start-timer").onclick = () => {
 document.getElementById("reset-timer").onclick = () => {
     clearInterval(timer);
     document.getElementById("timer-display").textContent = "00:00";
+    document.getElementById("minutes").value = "";
+    document.getElementById("seconds").value = "";
 };
