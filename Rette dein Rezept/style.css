@@ -49,10 +49,17 @@ button {
     width: 100%; 
     transition: 0.3s;
 }
-
+    /* ----Bei Desktop nutzung -----*/
 #add-button { background: #2d3436; color: white; }
 #add-button:hover { background: #000; }
-
+ /*  ---- Handy nutzer Oberfläche----*/
+@media (max-width: 600px){
+        #add-button { background: #ff6b6b; color: white; }
+   .vertical-chef {
+    
+    display:none;
+   }
+}
 /* --- 2. DIE LAUFENDE KÖCHIN --- */
 .animation-container {
     position: fixed;
