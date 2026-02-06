@@ -6,6 +6,18 @@
     <title>Rette dein Rezept</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        /* Kleiner CSS-Zusatz für das Handy-Feeling */
+        .info-box li {
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .info-box li:active {
+            background-color: rgba(0,0,0,0.05); /* Optisches Feedback beim Tippen */
+        }
+    </style>
 </head>
 <body>
     <div class="animation-container">
@@ -22,13 +34,13 @@
         <section class="card info-box">
             <h3>✨ Rezept-Retter</h3>
             <ol>
-                <li>Kategorie wählen & eingeben.</li>
-                <li>Zutaten & Anleitung ergänzen.</li>
-                <li>Timer beim Kochen nutzen!</li>
+                <li onclick="document.getElementById('category-select').scrollIntoView({behavior: 'smooth'})">Kategorie wählen & eingeben.</li>
+                <li onclick="document.getElementById('ingredients-field').scrollIntoView({behavior: 'smooth'})">Zutaten & Anleitung ergänzen.</li>
+                <li onclick="document.getElementById('timer-section').scrollIntoView({behavior: 'smooth'})">Timer beim Kochen nutzen!</li>
             </ol>
         </section>
 
-        <section class="card input-container">
+        <section id="input-form" class="card input-container">
             <h3>Neues Rezept</h3>
             <input type="text" id="input-field" placeholder="Name...">
             <select id="category-select">
@@ -68,7 +80,7 @@
         </div>
     </div>
 
-    <section class="timer-card">
+    <section id="timer-section" class="timer-card">
         <h3>⏱️ Koch-Timer</h3>
         <div id="timer-display">00:00</div>
         <div class="timer-inputs">

@@ -29,37 +29,76 @@ header {
     width: 300px; 
 }
 
+/* --- NEU: INFO-BOX OPTIMIERUNG (DIE 3 KATEGORIEN) --- */
+.info-box ol {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.info-box li {
+    background: #ffffff;
+    border: 1px solid #eee;
+    margin-bottom: 12px;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block; /* Für volle Breite */
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.info-box li:hover {
+    border-color: #ff6b6b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Aktiver Effekt für Handy-Nutzer (Tippen) */
+.info-box li:active {
+    transform: scale(0.96);
+    background-color: #fffafa;
+}
+
 input, select, textarea { 
     width: 100%; 
     margin-bottom: 10px; 
-    padding: 10px; 
+    padding: 12px; /* Etwas mehr Padding für Finger-Bedienung */
     border: 1px solid #ddd; 
-    border-radius: 6px; 
+    border-radius: 8px; 
     box-sizing: border-box; 
+    font-size: 16px; /* Verhindert automatisches Zoomen am iPhone */
 }
 
-textarea { height: 70px; resize: none; }
+textarea { height: 100px; resize: none; }
 
 button { 
-    padding: 10px; 
+    padding: 12px; 
     border: none; 
-    border-radius: 6px; 
+    border-radius: 8px; 
     cursor: pointer; 
     font-weight: bold; 
     width: 100%; 
     transition: 0.3s;
 }
-    /* ----Bei Desktop nutzung -----*/
+
 #add-button { background: #2d3436; color: white; }
 #add-button:hover { background: #000; }
- /*  ---- Handy nutzer Oberfläche----*/
+
+/*  ---- Handy nutzer Oberfläche ---- */
 @media (max-width: 600px){
-        #add-button { background: #ff6b6b; color: white; }
-   .vertical-chef {
+    #add-button { background: #ff6b6b; color: white; padding: 15px; }
     
-    display:none;
-   }
+    .container { padding: 10px; gap: 15px; }
+    .card { width: 100%; max-width: 100%; } /* Karten nutzen volle Breite */
+    
+    .vertical-chef { display:none; }
+    
+    #timer-display { font-size: 2.8rem; } /* Timer etwas kleiner für kleine Screens */
 }
+
 /* --- 2. DIE LAUFENDE KÖCHIN --- */
 .animation-container {
     position: fixed;
@@ -82,7 +121,7 @@ button {
     to { top: 100%; }
 }
 
-/* --- 3. DAS MODAL-POPUP (MIT SCROLL-FUNKTION) --- */
+/* --- 3. DAS MODAL-POPUP --- */
 .modal { 
     display: none; 
     position: fixed; 
@@ -98,11 +137,10 @@ button {
     margin: 5% auto; 
     padding: 25px; 
     border-radius: 15px; 
-    width: 80%; 
+    width: 85%; 
     max-width: 450px; 
     position: relative; 
     text-align: left; 
-    /* Fix für langes Lesen: */
     max-height: 85vh; 
     overflow-y: auto; 
 }
@@ -124,15 +162,16 @@ button {
 
 /* --- 4. LISTE & TIMER --- */
 ul { list-style: none; padding: 0; }
-li { 
+#recipe-list li { 
     background: #fff; border: 1px solid #eee; 
-    margin: 8px 0; padding: 12px; border-radius: 8px; 
+    margin: 8px 0; padding: 15px; border-radius: 10px; 
     cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; 
+    align-items: center;
 }
-li:hover { border-color: #ff6b6b; background: #fffafa; transform: translateX(5px); }
+#recipe-list li:hover { border-color: #ff6b6b; background: #fffafa; transform: translateX(5px); }
 
 .timer-card { background: white; max-width: 350px; margin: 40px auto; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 #timer-display { font-size: 3.5rem; color: #ff6b6b; font-family: 'Courier New', monospace; }
 .timer-btns { display: flex; gap: 10px; margin-top: 10px; }
-.btn-primary { background: #27ae60; color: white; }
-.btn-danger { background: #e74c3c; color: white; }
+.btn-primary { background: #27ae60; color: white; flex: 1; }
+.btn-danger { background: #e74c3c; color: white; flex: 1; }

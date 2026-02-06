@@ -20,7 +20,19 @@ const modal = document.getElementById("recipe-modal");
 const listEl = document.getElementById("recipe-list");
 const filterSelectEl = document.getElementById("filter-select");
 
-// --- 2. REZEPT SPEICHERN ---
+// --- 2. DISPLAY WAKE LOCK (Handy-Display anlassen) ---
+let wakeLock = null;
+const requestWakeLock = async () => {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+};
+
+// --- 3. REZEPT SPEICHERN ---
 document.getElementById("add-button").onclick = () => {
     const nameInput = document.getElementById("input-field");
     const ingredientsInput = document.getElementById("ingredients-field");
@@ -43,7 +55,7 @@ document.getElementById("add-button").onclick = () => {
     }
 };
 
-// --- 3. DATEN LADEN & ANZEIGEN ---
+// --- 4. DATEN LADEN & ANZEIGEN ---
 function updateRecipeList(snapshot) {
     listEl.innerHTML = ""; 
     
@@ -62,6 +74,7 @@ function updateRecipeList(snapshot) {
                 li.innerHTML = `<span>${data.name}</span> <small>➔</small>`;
                 
                 li.onclick = () => {
+                    requestWakeLock(); // Display anlassen beim Lesen
                     document.getElementById("modal-title").textContent = data.name;
                     document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten.";
                     document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung.";
@@ -90,18 +103,27 @@ onValue(recipesRef, (snapshot) => {
     updateRecipeList(snapshot);
 });
 
-// --- 4. MODAL LOGIK ---
-document.querySelector(".close-button").onclick = () => modal.style.display = "none";
-window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+// --- 5. MODAL LOGIK ---
+document.querySelector(".close-button").onclick = () => {
+    modal.style.display = "none";
+    if (wakeLock !== null) wakeLock.release().then(() => wakeLock = null);
+};
 
-// --- 5. FILTER-UPDATE ---
+window.onclick = (e) => { 
+    if (e.target == modal) {
+        modal.style.display = "none";
+        if (wakeLock !== null) wakeLock.release().then(() => wakeLock = null);
+    }
+};
+
+// --- 6. FILTER-UPDATE ---
 filterSelectEl.onchange = () => {
     onValue(recipesRef, (snapshot) => {
         updateRecipeList(snapshot);
     }, { onlyOnce: true });
 };
 
-// --- 6. KOCH-TIMER ---
+// --- 7. KOCH-TIMER ---
 let timer;
 document.getElementById("start-timer").onclick = () => {
     const min = parseInt(document.getElementById("minutes").value) || 0;
@@ -110,6 +132,7 @@ document.getElementById("start-timer").onclick = () => {
 
     if (totalSeconds <= 0) return;
 
+    requestWakeLock(); // Display anlassen, solange der Timer läuft
     clearInterval(timer);
     timer = setInterval(() => {
         totalSeconds--;
@@ -122,6 +145,7 @@ document.getElementById("start-timer").onclick = () => {
             clearInterval(timer);
             document.getElementById("ping-sound").play();
             alert("Zeit abgelaufen! 🍽️");
+            if (wakeLock !== null) wakeLock.release().then(() => wakeLock = null);
         }
     }, 1000);
 };
@@ -131,4 +155,5 @@ document.getElementById("reset-timer").onclick = () => {
     document.getElementById("timer-display").textContent = "00:00";
     document.getElementById("minutes").value = "";
     document.getElementById("seconds").value = "";
+    if (wakeLock !== null) wakeLock.release().then(() => wakeLock = null);
 };
