@@ -20,6 +20,23 @@ const modal = document.getElementById("recipe-modal");
 const listEl = document.getElementById("recipe-list");
 const filterSelectEl = document.getElementById("filter-select");
 
+// --- ZUGANGSKONTROLLE (Neu: Passwort-Schutz) ---
+function verifyAccess() {
+    // Prüfen, ob der Code in dieser Sitzung schon korrekt eingegeben wurde
+    if (sessionStorage.getItem("access_granted") === "true") {
+        return true;
+    }
+
+    const accessCode = prompt("Sicherheits-Check: Bitte gib den Code ein (z.B. 0001):");
+    if (accessCode === "0001") {
+        sessionStorage.setItem("access_granted", "true");
+        return true;
+    } else {
+        alert("Falscher Code! Aktion abgebrochen.");
+        return false;
+    }
+}
+
 // --- 2. DISPLAY WAKE LOCK (Handy-Display anlassen) ---
 let wakeLock = null;
 const requestWakeLock = async () => {
@@ -40,6 +57,9 @@ document.getElementById("add-button").onclick = () => {
     const categoryInput = document.getElementById("category-select");
 
     if (nameInput.value.trim()) {
+        // Erst Code abfragen, bevor gespeichert wird
+        if (!verifyAccess()) return;
+
         push(recipesRef, {
             name: nameInput.value,
             category: categoryInput.value.trim(), 
@@ -74,7 +94,7 @@ function updateRecipeList(snapshot) {
                 li.innerHTML = `<span>${data.name}</span> <small>➔</small>`;
                 
                 li.onclick = () => {
-                    requestWakeLock(); // Display anlassen beim Lesen
+                    requestWakeLock();
                     document.getElementById("modal-title").textContent = data.name;
                     document.getElementById("modal-ingredients").textContent = data.ingredients || "Keine Zutaten.";
                     document.getElementById("modal-instructions").textContent = data.instructions || "Keine Anleitung.";
@@ -84,7 +104,10 @@ function updateRecipeList(snapshot) {
                 li.oncontextmenu = (e) => {
                     e.preventDefault();
                     if (confirm(`"${data.name}" wirklich löschen?`)) {
-                        remove(ref(database, `recipes/${id}`));
+                        // Code abfragen vor dem Löschen
+                        if (verifyAccess()) {
+                            remove(ref(database, `recipes/${id}`));
+                        }
                     }
                 };
                 listEl.append(li);
@@ -132,7 +155,7 @@ document.getElementById("start-timer").onclick = () => {
 
     if (totalSeconds <= 0) return;
 
-    requestWakeLock(); // Display anlassen, solange der Timer läuft
+    requestWakeLock();
     clearInterval(timer);
     timer = setInterval(() => {
         totalSeconds--;
