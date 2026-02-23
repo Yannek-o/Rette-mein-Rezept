@@ -11,7 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # DIESER SCHRITT FEHLTE: Er tauscht die Texte aus
       - name: Inject Secrets
         run: |
           sed -i 's/SIGN_API_KEY_HERE/${{ secrets.FIREBASE_API_KEY }}/g' "Rette dein Rezept/script.js"
@@ -21,6 +20,7 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          # DIESE ZEILE MUSS IN DEINER DATEI STEHEN:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
           projectId: rette-dein-rezept
