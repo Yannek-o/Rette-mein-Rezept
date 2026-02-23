@@ -1,6 +1,7 @@
 // --- 1. FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+// Importiere die Firebase-Konfiguration
 
 const firebaseConfig = {
     apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
@@ -27,7 +28,7 @@ function verifyAccess() {
         return true;
     }
 
-    const accessCode = prompt("Sicherheits-Check: Bitte gib den Code ein (z.B. 0001):");
+    const accessCode = prompt("Sicherheits-Check: Bitte gib den Code ein:");
     if (accessCode === "0001") {
         sessionStorage.setItem("access_granted", "true");
         return true;
