@@ -1,0 +1,26 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # DIESER SCHRITT FEHLTE: Er tauscht die Texte aus
+      - name: Inject Secrets
+        run: |
+          sed -i 's/SIGN_API_KEY_HERE/${{ secrets.FIREBASE_API_KEY }}/g' "Rette dein Rezept/script.js"
+          sed -i 's/SIGN_ADMIN_PW_HERE/${{ secrets.ADMIN_PASSWORD }}/g' "Rette dein Rezept/script.js"
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: rette-dein-rezept

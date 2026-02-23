@@ -1,10 +1,14 @@
+// --- 0. ZUGANGSWEICHE (Lokal vs. Pipeline) ---
+// Prüfe, ob secretConfig aus der config.js existiert. Wenn nicht, nutze Platzhalter für die Pipeline.
+const FINAL_API_KEY = (typeof secretConfig !== 'undefined') ? secretConfig.apiKey : "SIGN_API_KEY_HERE";
+const FINAL_ADMIN_PW = (typeof secretConfig !== 'undefined') ? secretConfig.adminPw : "SIGN_ADMIN_PW_HERE";
+
 // --- 1. FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-// Importiere die Firebase-Konfiguration
 
 const firebaseConfig = {
-    apiKey: "AizaSvAtv94iOtjlSlkwvI5_o1M309h0RvBH0xI",
+    apiKey: FINAL_API_KEY, // Nutzt den Key von oben
     authDomain: "rette-dein-rezept.firebaseapp.com",
     databaseURL: "https://rette-dein-rezept-default-rtdb.europe-west1.firebasedatabase.app/", 
     projectId: "rette-dein-rezept",
@@ -28,8 +32,9 @@ function verifyAccess() {
         return true;
     }
 
-    const accessCode = prompt("Sicherheits-Check: Bitte gib den Code ein:");
-    if (accessCode === "0001") {
+    const accessCode = prompt("Speicher-Check: Bitte gib den Code ein:");
+    // Vergleicht die Eingabe mit dem Passwort aus der Weiche
+    if (accessCode === FINAL_ADMIN_PW) {
         sessionStorage.setItem("access_granted", "true");
         return true;
     } else {
